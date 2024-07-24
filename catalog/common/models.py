@@ -84,7 +84,12 @@ class IdType(models.TextChoices):
     DoubanDrama = "doubandrama", _("Douban Drama")  # type:ignore[reportCallIssue]
     DoubanDramaVersion = "doubandrama_version", _("Douban Drama Version")  # type:ignore[reportCallIssue]
     BooksTW = "bookstw", _("BooksTW Book")  # type:ignore[reportCallIssue]
-    BibliotekDK = "bibliotekdk", _("Bibliotek.dk")  # type:ignore[reportCallIssue]
+    BibliotekDK_Edition = "bibliotekdk_edition", _(
+        "Bibliotek.dk"
+    )  # type:ignore[reportCallIssue]
+    BibliotekDK_Work = "bibliotekdk_work", _(
+        "Bibliotek.dk"
+    )  # type:ignore[reportCallIssue]
     Bandcamp = "bandcamp", _("Bandcamp")  # type:ignore[reportCallIssue]
     Spotify_Album = "spotify_album", _("Spotify Album")  # type:ignore[reportCallIssue]
     Spotify_Show = "spotify_show", _("Spotify Podcast")  # type:ignore[reportCallIssue]
