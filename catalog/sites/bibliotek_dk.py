@@ -37,8 +37,21 @@ class BibliotekDKImageStore:
         return path
 
 
+class BibliotekDKSite(AbstractSite):
+
+    @classmethod
+    def url_to_id(cls, url: str):
+        id_value = super().url_to_id(url)
+
+        if id_value is None:
+            return None
+
+        # Normalize the id_value
+        return id_value.replace("%3A", ":")
+
+
 @SiteManager.register
-class BibliotekDK_Edition(AbstractSite):
+class BibliotekDK_Edition(BibliotekDKSite):
     SITE_NAME = SiteName.BibliotekDK
     ID_TYPE = IdType.BibliotekDK_Edition
     URL_PATTERNS = [
@@ -117,7 +130,10 @@ class BibliotekDK_Edition(AbstractSite):
 
         return ResourceContent(
             metadata=data,
-            lookup_ids={IdType.ISBN: isbn},
+            lookup_ids={
+                IdType.ISBN: isbn,
+                IdType.BibliotekDK_Edition: id_value,
+            },
         )
 
     def scrape(self):
@@ -136,7 +152,25 @@ class BibliotekDK_Edition(AbstractSite):
 
 
 @SiteManager.register
-class BibliotekDK_Work(AbstractSite):
+class BibliotekDK_eReolen(BibliotekDKSite):
+    SITE_NAME = SiteName.BibliotekDK_eReolen
+    ID_TYPE = IdType.BibliotekDK_eReolen
+    URL_PATTERNS = [
+        r"https://ereolen.dk/ting/object/([^?]+)",
+    ]
+    WIKI_PROPERTY_ID = ""
+    DEFAULT_MODEL = Edition
+
+    @classmethod
+    def id_to_url(cls, id_value):
+        return "https://ereolen.dk/ting/object/" + id_value
+
+    def scrape(self):
+        return BibliotekDK_Edition(id_value=self.id_value).scrape()
+
+
+@SiteManager.register
+class BibliotekDK_Work(BibliotekDKSite):
     SITE_NAME = SiteName.BibliotekDK
     ID_TYPE = IdType.BibliotekDK_Work
     URL_PATTERNS = [

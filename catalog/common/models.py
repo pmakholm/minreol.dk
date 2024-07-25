@@ -36,6 +36,7 @@ class SiteName(models.TextChoices):
     GoogleBooks = "googlebooks", _("Google Books")  # type:ignore[reportCallIssue]
     BooksTW = "bookstw", _("BooksTW")  # type:ignore[reportCallIssue]
     BibliotekDK = "bibliotekdk", _("Bibliotek.dk")  # type:ignore[reportCallIssue]
+    BibliotekDK_eReolen = "eReolen", _("eReolen.dk")  # type:ignore[reportCallIssue]
     IMDB = "imdb", _("IMDb")  # type:ignore[reportCallIssue]
     TMDB = "tmdb", _("TMDB")  # type:ignore[reportCallIssue]
     Bandcamp = "bandcamp", _("Bandcamp")  # type:ignore[reportCallIssue]
@@ -86,6 +87,9 @@ class IdType(models.TextChoices):
     BooksTW = "bookstw", _("BooksTW Book")  # type:ignore[reportCallIssue]
     BibliotekDK_Edition = "bibliotekdk_edition", _(
         "Bibliotek.dk"
+    )  # type:ignore[reportCallIssue]
+    BibliotekDK_eReolen = "bibliotekdk_ereolen", _(
+        "eReolen.dk"
     )  # type:ignore[reportCallIssue]
     BibliotekDK_Work = "bibliotekdk_work", _(
         "Bibliotek.dk"
