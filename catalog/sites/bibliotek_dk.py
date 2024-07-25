@@ -67,9 +67,11 @@ class BibliotekDK_Edition(BibliotekDKSite):
     @classmethod
     def get_edition(cls, id_value, data):
         # These are copied from the work object
-        workId = data["workJsonLd"]["data"]["work"]["workId"]
-        title = data["workJsonLd"]["data"]["work"]["titles"]["full"][0]
-        description = data["workJsonLd"]["data"]["work"]["abstract"][0]
+        jsonLd = data["workJsonLd"]["data"]["work"]
+
+        workId = jsonLd["workId"]
+        title = jsonLd["titles"]["full"][0]
+        description = jsonLd["abstract"][0] if jsonLd["abstract"] else None
 
         pub_year = None
         pub_house = None
@@ -81,7 +83,7 @@ class BibliotekDK_Edition(BibliotekDKSite):
                 continue
 
             pub_year = edition["edition"]["publicationYear"]["year"]
-            pub_house = edition["publisher"][0]
+            pub_house = edition["publisher"][0] if edition["publisher"] else None
 
             for creator in edition["creators"]:
                 authors.append(creator["display"])
