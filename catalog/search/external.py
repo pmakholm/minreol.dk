@@ -360,6 +360,7 @@ class ExternalSources:
         if c == "all" or c == "movietv":
             results.extend(TheMovieDatabase.search(q, page))
         if c == "all" or c == "book":
+            results.extend(BibliotekDk.search(q, page))
             results.extend(GoogleBooks.search(q, page))
             results.extend(Goodreads.search(q, page))
         if c == "all" or c == "game":

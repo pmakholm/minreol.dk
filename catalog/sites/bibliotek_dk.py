@@ -1,7 +1,9 @@
 import json
 import logging
 import re
+import time
 
+from django.core.cache import cache
 from django.core.files.storage import Storage, default_storage
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -10,6 +12,42 @@ from catalog.common.utils import resource_cover_path
 from catalog.models import *
 
 _logger = logging.getLogger(__name__)
+
+
+@staticmethod
+def query_str(content, query: str) -> str:
+    return content.xpath(query)[0].strip()
+
+
+def get_bibliotekdk_token():
+    cache_key = f"bibliotekdk:accessToken"
+    token = cache.get(cache_key)
+    if token:
+        return token
+
+    h = (
+        BasicDownloader("https://bibliotek.dk/", {"User-Agent": "curl/8.7.1"})
+        .download()
+        .html()
+    )
+    src = query_str(h, '//script[@id="__NEXT_DATA__"]/text()')
+    if not src:
+        raise ParseError(
+            type("BibliotekDKToken", (), {"url": "https://bibliotek.dk"}),
+            "__NEXT_DATA__ element",
+        )
+    session = json.loads(src)["props"]["pageProps"]["session"]
+
+    token = session["accessToken"]
+    timeout = session["exp"] - int(time.time())
+
+    if timeout > 60 * 60 * 24:
+        timeout = 60 * 60 * 24
+
+    if timeout > 60:
+        cache.set(cache_key, token, timeout)
+
+    return token
 
 
 class BibliotekDKImageDownloader(BasicImageDownloader):
